@@ -1,4 +1,5 @@
 ﻿using System.DirectoryServices;
+using System.Security.Principal;
 
 namespace ManagerUsersGroups.Repository.AD.Extensions
 {
@@ -7,7 +8,7 @@ namespace ManagerUsersGroups.Repository.AD.Extensions
         public static string GetProp(this SearchResult searchResult, string prop) =>
             searchResult.Properties[prop].Cast<string>().FirstOrDefault(string.Empty);
 
-        public static string GetSid(this SearchResult searchResult, string prop) =>
-            string.Empty;
+        public static string GetSid(this SearchResult searchResult) =>
+            new SecurityIdentifier(searchResult.Properties["objectSid"].Cast<byte>().ToArray(), 0).ToString();
     }
 }

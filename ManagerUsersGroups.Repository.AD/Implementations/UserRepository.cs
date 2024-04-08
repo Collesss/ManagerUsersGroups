@@ -6,6 +6,7 @@ using ManagerUsersGroups.Repository.Exceptions;
 using ManagerUsersGroups.Repository.Interfaces;
 using Microsoft.Extensions.Options;
 using System.DirectoryServices;
+using System.Security.Cryptography;
 
 namespace ManagerUsersGroups.Repository.AD.Implementations
 {
@@ -39,7 +40,7 @@ namespace ManagerUsersGroups.Repository.AD.Implementations
             }
             catch (Exception e) 
             {
-                throw new RepositoryException("Unknown error while searching.", e);
+                throw new RepositoryException("Unknown error while searching user.", e);
             }
         }
 
@@ -48,6 +49,20 @@ namespace ManagerUsersGroups.Repository.AD.Implementations
             try
             {
                 DirectorySearcher directorySearcher = new DirectorySearcher(_directoryEntry, $"(&(objectClass=user)(objectCategory=person)(objectSid={sid}))");
+
+                return Task.FromResult(_mapper.Map<SearchResult, UserEntity>(directorySearcher.FindOne()));
+            }
+            catch (Exception e)
+            {
+                throw new RepositoryException("Unknown error while get user.", e);
+            }
+        }
+
+        public Task<UserEntity> GetByDistinguishedName(string distinguishedName, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                DirectorySearcher directorySearcher = new DirectorySearcher(_directoryEntry, $"(&(objectClass=user)(objectCategory=person)(distinguishedName={distinguishedName}))");
 
                 return Task.FromResult(_mapper.Map<SearchResult, UserEntity>(directorySearcher.FindOne()));
             }
@@ -75,7 +90,7 @@ namespace ManagerUsersGroups.Repository.AD.Implementations
             }
             catch (Exception e)
             {
-                throw new RepositoryException("Unknown error while get user.", e);
+                throw new RepositoryException("Unknown error while get users.", e);
             }
         }
     }

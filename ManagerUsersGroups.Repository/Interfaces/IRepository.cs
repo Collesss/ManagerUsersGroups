@@ -6,6 +6,8 @@ namespace ManagerUsersGroups.Repository.Interfaces
     {
         Task<T> GetBySID(string sid, CancellationToken cancellationToken = default);
 
+        Task<T> GetByDistinguishedName(string distinguishedName, CancellationToken cancellationToken = default);
+
         Task<IEnumerable<T>> Find(string findStr, CancellationToken cancellationToken = default);
     }
 }
