@@ -21,18 +21,27 @@ namespace ManagerUsersGroups.Repository.LDAP.Implementations
             _options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
+        private IEnumerable<SearchResultEntry> GetSearchResultEntry(string filter)
+        {
+            DirectoryRequest request = new SearchRequest(_options.Value.SearchRoot, filter, SearchScope.Subtree);
+            SearchResponse response = (SearchResponse)_directoryConnection.SendRequest(request);
+
+            if (response.ResultCode != ResultCode.Success)
+                throw new RepositoryException($"{response.ResultCode}. {response.ErrorMessage}");
+
+            return response.Entries.Cast<SearchResultEntry>();
+        }
+
+
         public Task<IEnumerable<UserEntity>> Find(string findStr, CancellationToken cancellationToken = default)
         {
             try
             {
-                DirectoryRequest request = new SearchRequest("", $"(&(objectClass=user)(objectCategory=person)(anr={findStr}))", SearchScope.Subtree);
-
-                SearchResponse response = (SearchResponse)_directoryConnection.SendRequest(request);
-
-                if (response.ResultCode != ResultCode.Success)
-                    throw new RepositoryException($"{response.ResultCode}. {response.ErrorMessage}");
-
-                return Task.FromResult(_mapper.Map<IEnumerable<SearchResultEntry>, IEnumerable<UserEntity>>(response.Entries.Cast<SearchResultEntry>()));
+                return Task.FromResult(_mapper.Map<IEnumerable<SearchResultEntry>, IEnumerable<UserEntity>>(GetSearchResultEntry($"(&(objectClass=user)(objectCategory=person)(anr={findStr}))")));
+            }
+            catch (RepositoryException)
+            {
+                throw;
             }
             catch (Exception e)
             {
@@ -44,15 +53,11 @@ namespace ManagerUsersGroups.Repository.LDAP.Implementations
         {
             try
             {
-                
-                DirectoryRequest request = new SearchRequest(_options.Value.SearchRoot, $"(&(objectClass=user)(objectCategory=person)(objectSid={sid}))", SearchScope.Subtree);
-                
-                SearchResponse response = (SearchResponse)_directoryConnection.SendRequest(request);
-
-                if (response.ResultCode != ResultCode.Success)
-                    throw new RepositoryException($"{response.ResultCode}. {response.ErrorMessage}");
-
-                return Task.FromResult(_mapper.Map<SearchResultEntry, UserEntity>(response.Entries.Cast<SearchResultEntry>().FirstOrDefault()));
+                return Task.FromResult(_mapper.Map<SearchResultEntry, UserEntity>(GetSearchResultEntry($"(&(objectClass=user)(objectCategory=person)(objectSid={sid}))").FirstOrDefault()));
+            }
+            catch (RepositoryException)
+            {
+                throw;
             }
             catch (Exception e)
             {
@@ -64,11 +69,11 @@ namespace ManagerUsersGroups.Repository.LDAP.Implementations
         {
             try
             {
-                //DirectorySearcher directorySearcher = new DirectorySearcher(_directoryEntry, $"(&(objectClass=user)(objectCategory=person)(distinguishedName={distinguishedName}))");
-
-                //return Task.FromResult(_mapper.Map<SearchResult, UserEntity>(directorySearcher.FindOne()));
-
-                throw new Exception("error");
+                return Task.FromResult(_mapper.Map<SearchResultEntry, UserEntity>(GetSearchResultEntry($"(&(objectClass=user)(objectCategory=person)(distinguishedName={distinguishedName}))").FirstOrDefault()));
+            }
+            catch (RepositoryException)
+            {
+                throw;
             }
             catch (Exception e)
             {
@@ -80,15 +85,10 @@ namespace ManagerUsersGroups.Repository.LDAP.Implementations
         {
             try
             {
-                //DirectorySearcher directorySearcherGroup = new DirectorySearcher(_directoryEntry, $"(&(objectClass=group)(objectCategory=group)(objectSid={groupSid}))");
+                SearchResultEntry searchResultGroup = GetSearchResultEntry($"(&(objectClass=group)(objectCategory=group)(objectSid={groupSid}))").FirstOrDefault() 
+                    ?? throw new RepositoryNotExistEntityException(groupSid, "Group with this sid not exist.");
 
-                //SearchResult searchResult = directorySearcherGroup.FindOne() ?? throw new RepositoryNotExistEntityException(groupSid, "Group with this sid not exist.");
-
-                //DirectorySearcher directorySearcherUsers = new DirectorySearcher(_directoryEntry, $"(&(objectClass=user)(objectCategory=person)(memberOf={searchResult.GetProp("distinguishedName")}))");
-
-                //return Task.FromResult(_mapper.Map<IEnumerable<SearchResult>, IEnumerable<UserEntity>>(directorySearcherUsers.FindAll().Cast<SearchResult>()));
-
-                throw new Exception("error");
+                return Task.FromResult(_mapper.Map<IEnumerable<SearchResultEntry>, IEnumerable<UserEntity>>(GetSearchResultEntry($"(&(objectClass=user)(objectCategory=person)(memberOf={searchResultGroup.DistinguishedName}))")));
             }
             catch (RepositoryException)
             {
