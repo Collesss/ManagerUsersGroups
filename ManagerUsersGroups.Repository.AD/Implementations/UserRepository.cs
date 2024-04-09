@@ -6,7 +6,6 @@ using ManagerUsersGroups.Repository.Exceptions;
 using ManagerUsersGroups.Repository.Interfaces;
 using Microsoft.Extensions.Options;
 using System.DirectoryServices;
-using System.Security.Cryptography;
 
 namespace ManagerUsersGroups.Repository.AD.Implementations
 {

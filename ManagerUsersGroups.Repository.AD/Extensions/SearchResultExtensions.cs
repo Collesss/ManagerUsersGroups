@@ -9,6 +9,6 @@ namespace ManagerUsersGroups.Repository.AD.Extensions
             searchResult.Properties[prop].Cast<string>().FirstOrDefault(string.Empty);
 
         public static string GetSid(this SearchResult searchResult) =>
-            new SecurityIdentifier(searchResult.Properties["objectSid"].Cast<byte>().ToArray(), 0).ToString();
+            new SecurityIdentifier(searchResult.Properties["objectSid"].Cast<byte[]>().First(), 0).ToString();
     }
 }
