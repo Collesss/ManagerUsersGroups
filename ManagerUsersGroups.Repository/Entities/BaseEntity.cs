@@ -6,7 +6,7 @@
 
         public string DistinguishedName { get; set; }
 
-        public string CanonicalName { get; set; }
+        //public string CanonicalName { get; set; }
 
         public string CommonName { get; set; }
     }
