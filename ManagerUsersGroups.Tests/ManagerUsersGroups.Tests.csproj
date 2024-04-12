@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ManagerUsersGroups.Repository.LDAP\ManagerUsersGroups.Repository.LDAP.csproj" />
+    <ProjectReference Include="..\ManagerUsersGroups.Repository.AD\ManagerUsersGroups.Repository.AD.csproj" />
     <ProjectReference Include="..\ManagerUsersGroups.Repository\ManagerUsersGroups.Repository.csproj" />
   </ItemGroup>
 

@@ -1,18 +1,28 @@
-﻿namespace ManagerUsersGroups.Tests
+﻿using AutoMapper;
+using ManagerUsersGroups.Repository.AD.AutoMapperProfiles;
+using ManagerUsersGroups.Repository.AD.Implementations;
+using ManagerUsersGroups.Repository.AD.Options;
+using ManagerUsersGroups.Repository.Entities;
+using ManagerUsersGroups.Repository.Interfaces;
+using Microsoft.Extensions.Options;
+using Moq;
+
+namespace ManagerUsersGroups.Tests
 {
-    /*
+    
     [TestClass]
     public class RepositoryADUnitTest
     {
 
         [TestMethod]
-        public void TestGetBySid()
+        public void TestGetBySidOk()
         {
             #region arrange
             ADOptions options = new ADOptions 
             {
                 AuthenticationTypes = System.DirectoryServices.AuthenticationTypes.None
             };
+
 
             Mock<IOptionsSnapshot<ADOptions>> mockOptions = new Mock<IOptionsSnapshot<ADOptions>>();
             mockOptions
@@ -36,5 +46,5 @@
             #endregion
         }
     }
-    */
+    
 }

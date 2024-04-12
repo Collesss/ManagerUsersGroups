@@ -12,7 +12,7 @@ namespace ManagerUsersGroups.Repository.AD.AutoMapperProfiles
             CreateMap<SearchResult, BaseEntity>()
                 .ForMember(be => be.SID, opts => opts.MapFrom(sr => sr.GetSid()))
                 .ForMember(be => be.DistinguishedName, opts => opts.MapFrom(sr => sr.GetProp("distinguishedName")))
-                .ForMember(be => be.CanonicalName, opts => opts.MapFrom(sr => sr.GetProp("canonicalName")))
+                //.ForMember(be => be.CanonicalName, opts => opts.MapFrom(sr => sr.GetProp("canonicalName")))
                 .ForMember(be => be.CommonName, opts => opts.MapFrom(sr => sr.GetProp("cn")));
 
             CreateMap<SearchResult, UserEntity>()
