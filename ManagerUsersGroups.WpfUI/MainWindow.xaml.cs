@@ -22,6 +22,8 @@ namespace ManagerUsersGroups.WpfUI
     {
         public MainWindow()
         {
+            DataContext = new ApplicationUsersModelView();
+
             InitializeComponent();
         }
     }
