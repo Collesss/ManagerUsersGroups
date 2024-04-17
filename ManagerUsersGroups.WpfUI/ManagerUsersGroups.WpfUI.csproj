@@ -9,9 +9,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ManagerUsersGroups.Repository.AD\ManagerUsersGroups.Repository.AD.csproj" />
     <ProjectReference Include="..\ManagerUsersGroups.Repository\ManagerUsersGroups.Repository.csproj" />
   </ItemGroup>
 
