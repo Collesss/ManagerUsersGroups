@@ -1,14 +1,10 @@
-﻿using System;
-
-namespace ManagerUsersGroups.WpfUI.Command
+﻿namespace ManagerUsersGroups.WpfUI.Command
 {
     public class SettingsCommand : BaseCommand
     {
-
-
         public override void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            new SettingsWindow().ShowDialog();
         }
     }
 }

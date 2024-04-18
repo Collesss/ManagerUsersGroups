@@ -8,16 +8,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800">
     <Window.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-        <vm:ApplicationUsersModelView x:Key="ViewModel"/>
     </Window.Resources>
     <Grid DataContext="{StaticResource ViewModel}">
         <Grid.RowDefinitions>
@@ -38,7 +28,7 @@
         </Grid.ColumnDefinitions>
 
         <Menu Padding="0 0 0 2" Grid.ColumnSpan="4">
-            <MenuItem Header="Настройки"></MenuItem>
+            <MenuItem Header="Настройки" Command="{Binding OpenSettingCommand}"></MenuItem>
         </Menu>
 
         <TextBlock TextWrapping="Wrap" Text="Login/ФИО/Email" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
@@ -46,17 +36,17 @@
         <TextBlock TextWrapping="Wrap" Text="ФИО" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
         <TextBlock TextWrapping="Wrap" Text="Email" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
 
-        <TextBox TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Path=MainViewModel.EmailLoginsFIO,Mode=OneWayToSource}" Grid.Column="0" Grid.Row="2" Margin="5" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"/>
-        <TextBox TextWrapping="Wrap" IsReadOnly="True" Text="{Binding Path=MainViewModel.Logins,Mode=OneWay}" Grid.Column="1" Grid.Row="2" Margin="5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-        <TextBox TextWrapping="Wrap" IsReadOnly="True" Text="{Binding Path=MainViewModel.FIOs,Mode=OneWay}" Grid.Column="2" Grid.Row="2" Margin="5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-        <TextBox TextWrapping="Wrap" IsReadOnly="True" Text="{Binding Path=MainViewModel.Emails,Mode=OneWay}" Grid.Column="3" Grid.Row="2" Margin="5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <TextBox TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding MainViewModel.EmailLoginsFIO,Mode=TwoWay}" Grid.Column="0" Grid.Row="2" Margin="5" Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"/>
+        <TextBox TextWrapping="Wrap" IsReadOnly="True" Text="{Binding MainViewModel.Logins,Mode=OneWay}" Grid.Column="1" Grid.Row="2" Margin="5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <TextBox TextWrapping="Wrap" IsReadOnly="True" Text="{Binding MainViewModel.FIOs,Mode=OneWay}" Grid.Column="2" Grid.Row="2" Margin="5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <TextBox TextWrapping="Wrap" IsReadOnly="True" Text="{Binding MainViewModel.Emails,Mode=OneWay}" Grid.Column="3" Grid.Row="2" Margin="5" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
 
         <TextBlock TextWrapping="Wrap" Text="Email formatted for Outlook" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
-        <TextBox TextWrapping="Wrap" Text="Emails" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="4" Margin="10" Padding="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <TextBox TextWrapping="Wrap" Text="{Binding MainViewModel.EmailsFormattedForOutlook,Mode=OneWay}" Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="4" Margin="10" Padding="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
 
         <TextBlock TextWrapping="Wrap" Text="Email formatted for HelpDesk" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
-        <TextBox TextWrapping="Wrap" Text="Emails" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="4" Margin="10" Padding="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <TextBox TextWrapping="Wrap" Text="{Binding MainViewModel.EmailsFormattedForHelp}" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="4" Margin="10" Padding="0" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
 
-        <Button Command="{Binding FindCommand}" Content="Button" Grid.Column="0" Grid.Row="7" Margin="5 5 5 10" Padding="5" Width="140"/>
+        <Button Command="{Binding FindCommand}" Content="Искать" Grid.Column="0" Grid.Row="7" Margin="5 5 5 10" Padding="5" Width="140"/>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
-﻿using ManagerUsersGroups.Repository.AD.Implementations;
+﻿using ManagerUsersGroups.Repository.AD.AutoMapperProfiles;
+using ManagerUsersGroups.Repository.AD.Implementations;
 using ManagerUsersGroups.Repository.AD.Options;
 using ManagerUsersGroups.Repository.Interfaces;
 using ManagerUsersGroups.WpfUI.Command;
@@ -16,6 +17,7 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
 
 
         public ICommand FindCommand { get; }
+        public ICommand OpenSettingCommand { get; }
 
 
         private readonly IServiceProvider _serviceProvider;
@@ -28,12 +30,13 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
             hostBuilder.ConfigureServices(services => 
             {
                 services.AddScoped<IUserRepository, UserRepository>();
+                services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
                 services.AddOptions<ADOptions>().Configure(opts => 
                 {
                     opts.UserName = ConfigViewModel.UserName;
                     opts.Path = ConfigViewModel.Path;
                     opts.Password = ConfigViewModel.Password;
-                    opts.AuthenticationTypes = ConfigViewModel.AuthenticationTypes;
+                    opts.AuthenticationTypes = ConfigViewModel.AuthenticationType;
                     opts.LoginType = ConfigViewModel.LoginType;
                 });
             });
@@ -41,7 +44,7 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
             _serviceProvider = hostBuilder.Build().Services;
 
             FindCommand = new FindCommand(MainViewModel, _serviceProvider);
+            OpenSettingCommand = new SettingsCommand();
         }
-        
     }
 }

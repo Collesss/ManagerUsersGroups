@@ -82,7 +82,8 @@ namespace ManagerUsersGroups.WpfUI.Command
             _mainViewModel.Logins = string.Join('\n', users.Select(user => user.Login));
             _mainViewModel.Emails = string.Join('\n', users.Select(user => user.Email));
             _mainViewModel.FIOs = string.Join('\n', users.Select(user => user.DisplayName));
-
+            _mainViewModel.EmailsFormattedForOutlook = string.Join("; ", users.Select(user => user.Email));
+            _mainViewModel.EmailsFormattedForHelp = string.Join(",", users.Select(user => user.Email));
 
             /*
             FindResult[] users = Task.WhenAll(findStrings.Select(async findStr =>

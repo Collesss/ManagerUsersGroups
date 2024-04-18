@@ -1,4 +1,6 @@
 ﻿using ManagerUsersGroups.Repository.AD.Options;
+using System;
+using System.Collections.Generic;
 using System.DirectoryServices;
 
 namespace ManagerUsersGroups.WpfUI.ViewModel
@@ -9,7 +11,15 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
         private string _path;
         private string _userName;
         private string _password;
-        private AuthenticationTypes _authenticationTypes;
+        private AuthenticationTypes _authenticationType;
+
+
+        public IEnumerable<LoginType> LoginTypes =>
+            Enum.GetValues<LoginType>();
+
+        public IEnumerable<AuthenticationTypes> AuthenticationTypes =>
+            Enum.GetValues<AuthenticationTypes>();
+
 
 
         public LoginType LoginType
@@ -52,12 +62,12 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
             }
         }
 
-        public AuthenticationTypes AuthenticationTypes
+        public AuthenticationTypes AuthenticationType
         {
-            get => _authenticationTypes;
+            get => _authenticationType;
             set
             {
-                _authenticationTypes = value;
+                _authenticationType = value;
                 OnPropertyChanged();
             }
         }

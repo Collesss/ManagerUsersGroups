@@ -3,18 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ManagerUsersGroups.WpfUI"
         mc:Ignorable="d"
         Title="SettingsWindow" Height="Auto" Width="450">
     <Window.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
     </Window.Resources>
-    <Grid>
+    <Grid DataContext="{Binding Source={StaticResource ViewModel}, Path=ConfigViewModel}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -32,12 +25,16 @@
         <TextBlock TextWrapping="Wrap" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5" Text="Пароль:"/>
         <TextBlock TextWrapping="Wrap" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5" Text="Тип аутентификации:"/>
 
-        <ComboBox Grid.Column="1" Grid.Row="0" Width="120"/>
-        
-        <TextBox TextWrapping="NoWrap" Grid.Column="1" Grid.Row="1" Padding="2" Margin="3 3 5 3" VerticalContentAlignment="Center" TextAlignment="Left"/>
-        <TextBox TextWrapping="NoWrap" Grid.Column="1" Grid.Row="2" Padding="2" Margin="3 3 5 3" VerticalContentAlignment="Center" TextAlignment="Left"/>
-        <TextBox TextWrapping="NoWrap" Grid.Column="1" Grid.Row="3" Padding="2" Margin="3 3 5 3" VerticalContentAlignment="Center" TextAlignment="Left"/>
+        <ComboBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3 3 5 3" Width="Auto" ItemsSource="{Binding LoginTypes,Mode=OneTime}" SelectedItem="{Binding LoginType,Mode=TwoWay}"/>
 
-        <ComboBox Grid.Column="1" Grid.Row="5" Width="120"/>
+        <TextBox IsReadOnly="True" TextWrapping="NoWrap" Grid.Column="1" Grid.Row="1" Padding="2" Margin="3 3 5 3" VerticalAlignment="Center" TextAlignment="Left" Text="{Binding Path=Path,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
+            
+        </TextBox>
+        <TextBox IsReadOnly="True" TextWrapping="NoWrap" Grid.Column="1" Grid.Row="2" Padding="2" Margin="3 3 5 3" VerticalAlignment="Center" TextAlignment="Left" Text="{Binding Path=UserName,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
+        <TextBox IsReadOnly="True" TextWrapping="NoWrap" Grid.Column="1" Grid.Row="3" Padding="2" Margin="3 3 5 3" VerticalAlignment="Center" TextAlignment="Left" Text="{Binding Path=Password,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
+
+        <!--<ComboBox Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3 3 5 3" Width="Auto" ItemsSource="{Binding AuthenticationTypes,Mode=OneTime}" SelectedItem="{Binding AuthenticationType,Mode=TwoWay}"/>-->
+
+
     </Grid>
 </Window>
