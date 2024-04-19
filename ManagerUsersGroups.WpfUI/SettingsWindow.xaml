@@ -3,9 +3,31 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cv="clr-namespace:ManagerUsersGroups.WpfUI.Converters"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="Auto" Width="450">
+        Title="Setting"
+        Height="Auto" Width="450">
     <Window.Resources>
+        <Style x:Key="CommonTextBlock">
+            <Setter Property="TextBox.FontSize" Value="{StaticResource CommonFontSize}"/>
+            <Setter Property="TextBox.TextWrapping" Value="NoWrap"/>
+            <Setter Property="TextBox.VerticalAlignment" Value="Center"/>
+            <Setter Property="TextBox.HorizontalAlignment" Value="Right"/>
+            <Setter Property="TextBox.Margin" Value="5"/>
+        </Style>
+        <Style x:Key="CommonTextBox">
+            <Setter Property="TextBox.Padding" Value="2"/>
+            <Setter Property="TextBox.Margin" Value="3 3 5 3"/>
+            <Setter Property="TextBox.TextWrapping" Value="NoWrap"/>
+            <Setter Property="TextBox.VerticalAlignment" Value="Center"/>
+            <Setter Property="TextBox.TextAlignment" Value="Left"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="5 8 5 5"/>
+        </Style>
+        <cv:EnumFlagsConverter x:Key="FlagConverter"/>
     </Window.Resources>
     <Grid DataContext="{Binding Source={StaticResource ViewModel}, Path=ConfigViewModel}">
         <Grid.ColumnDefinitions>
@@ -19,22 +41,49 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock TextWrapping="Wrap" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5" Text="Тип логина:"/>
-        <TextBlock TextWrapping="Wrap" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5" Text="Путь:"/>
-        <TextBlock TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5" Text="Имя пользователя:"/>
-        <TextBlock TextWrapping="Wrap" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5" Text="Пароль:"/>
-        <TextBlock TextWrapping="Wrap" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5" Text="Тип аутентификации:"/>
+        <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource CommonTextBlock}" Text="Тип логина:"/>
+        <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource CommonTextBlock}" Text="Путь:"/>
+        <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource CommonTextBlock}" Text="Имя пользователя:"/>
+        <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource CommonTextBlock}" Text="Пароль:"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource CommonTextBlock}" Text="Тип аутентификации:"/>
 
         <ComboBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3 3 5 3" Width="Auto" ItemsSource="{Binding LoginTypes,Mode=OneTime}" SelectedItem="{Binding LoginType,Mode=TwoWay}"/>
 
-        <TextBox IsReadOnly="True" TextWrapping="NoWrap" Grid.Column="1" Grid.Row="1" Padding="2" Margin="3 3 5 3" VerticalAlignment="Center" TextAlignment="Left" Text="{Binding Path=Path,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}">
-            
-        </TextBox>
-        <TextBox IsReadOnly="True" TextWrapping="NoWrap" Grid.Column="1" Grid.Row="2" Padding="2" Margin="3 3 5 3" VerticalAlignment="Center" TextAlignment="Left" Text="{Binding Path=UserName,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
-        <TextBox IsReadOnly="True" TextWrapping="NoWrap" Grid.Column="1" Grid.Row="3" Padding="2" Margin="3 3 5 3" VerticalAlignment="Center" TextAlignment="Left" Text="{Binding Path=Password,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="1" Style="{StaticResource CommonTextBox}" Text="{Binding Path=Path,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="2" Style="{StaticResource CommonTextBox}" Text="{Binding Path=UserName,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
+        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="3" Style="{StaticResource CommonTextBox}" Text="{Binding Path=Password,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
 
-        <!--<ComboBox Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3 3 5 3" Width="Auto" ItemsSource="{Binding AuthenticationTypes,Mode=OneTime}" SelectedItem="{Binding AuthenticationType,Mode=TwoWay}"/>-->
+        <Grid Grid.Column="1" Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource CommonTextBlock}" Text="None:"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource CommonTextBlock}" Text="Secure:"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource CommonTextBlock}" Text="Encryption:"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource CommonTextBlock}" Text="SecureSocketsLayer:"/>
+            <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource CommonTextBlock}" Text="ReadonlyServer:"/>
+            <TextBlock Grid.Column="0" Grid.Row="5" Style="{StaticResource CommonTextBlock}" Text="Anonymous:"/>
+            <TextBlock Grid.Column="0" Grid.Row="6" Style="{StaticResource CommonTextBlock}" Text="FastBind:"/>
+            <TextBlock Grid.Column="0" Grid.Row="7" Style="{StaticResource CommonTextBlock}" Text="Signing:"/>
+            <TextBlock Grid.Column="0" Grid.Row="8" Style="{StaticResource CommonTextBlock}" Text="Sealing:"/>
+            <TextBlock Grid.Column="0" Grid.Row="9" Style="{StaticResource CommonTextBlock}" Text="Delegation:"/>
+            <TextBlock Grid.Column="0" Grid.Row="10" Style="{StaticResource CommonTextBlock}" Text="ServerBind:"/>
 
-
+            <CheckBox Grid.Column="1" Grid.Row="0"/>
+        </Grid>
     </Grid>
 </Window>
