@@ -17,11 +17,6 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
         public IEnumerable<LoginType> LoginTypes =>
             Enum.GetValues<LoginType>();
 
-        public IEnumerable<AuthenticationTypes> AuthenticationTypes =>
-            Enum.GetValues<AuthenticationTypes>();
-
-
-
         public LoginType LoginType
         {
             get => _loginType; 

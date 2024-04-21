@@ -4,9 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cv="clr-namespace:ManagerUsersGroups.WpfUI.Converters"
+        xmlns:ad="clr-namespace:ManagerUsersGroups.Repository.AD.Options;assembly=ManagerUsersGroups.Repository.AD"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:en="clr-namespace:System.DirectoryServices;assembly=System.DirectoryServices"
         mc:Ignorable="d"
         Title="Setting"
-        Height="Auto" Width="450">
+        Width="450"
+        SizeToContent="Height">
     <Window.Resources>
         <Style x:Key="CommonTextBlock">
             <Setter Property="TextBox.FontSize" Value="{StaticResource CommonFontSize}"/>
@@ -16,6 +20,7 @@
             <Setter Property="TextBox.Margin" Value="5"/>
         </Style>
         <Style x:Key="CommonTextBox">
+            <Setter Property="TextBox.FontSize" Value="{StaticResource CommonFontSize}"/>
             <Setter Property="TextBox.Padding" Value="2"/>
             <Setter Property="TextBox.Margin" Value="3 3 5 3"/>
             <Setter Property="TextBox.TextWrapping" Value="NoWrap"/>
@@ -26,8 +31,41 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Margin" Value="5 8 5 5"/>
+            <Setter Property="IsEnabled" Value="False"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Source={StaticResource ViewModel},Path=ConfigViewModel.LoginType}" Value="{x:Static ad:LoginType.PathWithLoginAndPassAndAuthenticationType}">
+                    <Setter Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
-        <cv:EnumFlagsConverter x:Key="FlagConverter"/>
+        <Style x:Key="BaseStyleTextBoxEnum" BasedOn="{StaticResource CommonTextBox}">
+            <Setter Property="TextBox.IsEnabled" Value="False"/>
+            <Setter Property="TextBox.Background" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
+        </Style>
+        <Style x:Key="PathWithLoginAndPassAndAuthenticationType" BasedOn="{StaticResource BaseStyleTextBoxEnum}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Source={StaticResource ViewModel},Path=ConfigViewModel.LoginType}" Value="{x:Static ad:LoginType.PathWithLoginAndPassAndAuthenticationType}">
+                    <Setter Property="TextBox.IsEnabled" Value="True"/>
+                    <Setter Property="TextBox.Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="PathWithLoginAndPass" BasedOn="{StaticResource PathWithLoginAndPassAndAuthenticationType}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Source={StaticResource ViewModel},Path=ConfigViewModel.LoginType}" Value="{x:Static ad:LoginType.PathWithLoginAndPass}">
+                    <Setter Property="TextBox.IsEnabled" Value="True"/>
+                    <Setter Property="TextBox.Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="UserContextWithPath" BasedOn="{StaticResource PathWithLoginAndPass}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Source={StaticResource ViewModel},Path=ConfigViewModel.LoginType}" Value="{x:Static ad:LoginType.UserContextWithPath}">
+                    <Setter Property="TextBox.IsEnabled" Value="True"/>
+                    <Setter Property="TextBox.Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid DataContext="{Binding Source={StaticResource ViewModel}, Path=ConfigViewModel}">
         <Grid.ColumnDefinitions>
@@ -41,17 +79,18 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
+        
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource CommonTextBlock}" Text="Тип логина:"/>
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource CommonTextBlock}" Text="Путь:"/>
         <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource CommonTextBlock}" Text="Имя пользователя:"/>
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource CommonTextBlock}" Text="Пароль:"/>
-        <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource CommonTextBlock}" Text="Тип аутентификации:"/>
+        <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource CommonTextBlock}" VerticalAlignment="Top" Text="Тип аутентификации:"/>
 
         <ComboBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3 3 5 3" Width="Auto" ItemsSource="{Binding LoginTypes,Mode=OneTime}" SelectedItem="{Binding LoginType,Mode=TwoWay}"/>
 
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="1" Style="{StaticResource CommonTextBox}" Text="{Binding Path=Path,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="2" Style="{StaticResource CommonTextBox}" Text="{Binding Path=UserName,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
-        <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="3" Style="{StaticResource CommonTextBox}" Text="{Binding Path=Password,Mode=TwoWay}" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource UserContextWithPath}" Text="{Binding Path=Path,Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PathWithLoginAndPass}" Text="{Binding Path=UserName,Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PathWithLoginAndPass}" Text="{Binding Path=Password,Mode=TwoWay}"/>
 
         <Grid Grid.Column="1" Grid.Row="4">
             <Grid.ColumnDefinitions>
@@ -69,21 +108,27 @@
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource CommonTextBlock}" Text="None:"/>
             <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource CommonTextBlock}" Text="Secure:"/>
-            <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource CommonTextBlock}" Text="Encryption:"/>
-            <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource CommonTextBlock}" Text="SecureSocketsLayer:"/>
-            <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource CommonTextBlock}" Text="ReadonlyServer:"/>
-            <TextBlock Grid.Column="0" Grid.Row="5" Style="{StaticResource CommonTextBlock}" Text="Anonymous:"/>
-            <TextBlock Grid.Column="0" Grid.Row="6" Style="{StaticResource CommonTextBlock}" Text="FastBind:"/>
-            <TextBlock Grid.Column="0" Grid.Row="7" Style="{StaticResource CommonTextBlock}" Text="Signing:"/>
-            <TextBlock Grid.Column="0" Grid.Row="8" Style="{StaticResource CommonTextBlock}" Text="Sealing:"/>
-            <TextBlock Grid.Column="0" Grid.Row="9" Style="{StaticResource CommonTextBlock}" Text="Delegation:"/>
-            <TextBlock Grid.Column="0" Grid.Row="10" Style="{StaticResource CommonTextBlock}" Text="ServerBind:"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource CommonTextBlock}" Text="Encryption/SecureSocketsLayer:"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource CommonTextBlock}" Text="ReadonlyServer:"/>
+            <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource CommonTextBlock}" Text="Anonymous:"/>
+            <TextBlock Grid.Column="0" Grid.Row="5" Style="{StaticResource CommonTextBlock}" Text="FastBind:"/>
+            <TextBlock Grid.Column="0" Grid.Row="6" Style="{StaticResource CommonTextBlock}" Text="Signing:"/>
+            <TextBlock Grid.Column="0" Grid.Row="7" Style="{StaticResource CommonTextBlock}" Text="Sealing:"/>
+            <TextBlock Grid.Column="0" Grid.Row="8" Style="{StaticResource CommonTextBlock}" Text="Delegation:"/>
+            <TextBlock Grid.Column="0" Grid.Row="9" Style="{StaticResource CommonTextBlock}" Text="ServerBind:"/>
 
-            <CheckBox Grid.Column="1" Grid.Row="0"/>
+            <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Secure}}"/>
+            <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Encryption}}"/>
+            <CheckBox Grid.Column="1" Grid.Row="3" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.ReadonlyServer}}"/>
+            <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Anonymous}}"/>
+            <CheckBox Grid.Column="1" Grid.Row="5" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.FastBind}}"/>
+            <CheckBox Grid.Column="1" Grid.Row="6" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Signing}}"/>
+            <CheckBox Grid.Column="1" Grid.Row="7" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Sealing}}"/>
+            <CheckBox Grid.Column="1" Grid.Row="8" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Delegation}}"/>
+            <CheckBox Grid.Column="1" Grid.Row="9" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.ServerBind}}"/>
         </Grid>
     </Grid>
 </Window>

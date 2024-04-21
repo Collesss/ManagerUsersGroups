@@ -1,20 +1,34 @@
-﻿using System;
+﻿using ManagerUsersGroups.WpfUI.ViewModel;
+using System;
 using System.DirectoryServices;
 using System.Globalization;
 using System.Windows.Data;
 
 namespace ManagerUsersGroups.WpfUI.Converters
 {
-    public class EnumFlagsConverter : IMultiValueConverter
+    public class EnumFlagsConverter : IValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public ApplicationUsersModelView ViewModel { get; init; }
+
+        public EnumFlagsConverter(/*ConfigModelView viewModel*/) 
         {
-            throw new NotImplementedException();
+            //_viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            AuthenticationTypes authenticationType = (AuthenticationTypes)value;
+            AuthenticationTypes authenticationTypeParam = (AuthenticationTypes)parameter;
+
+            return (authenticationType & authenticationTypeParam) == authenticationTypeParam;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            AuthenticationTypes authenticationTypeParam = (AuthenticationTypes)parameter;
+            bool isChecked = (bool)value;
+
+            return isChecked ? (ViewModel.ConfigViewModel.AuthenticationType | authenticationTypeParam) : (ViewModel.ConfigViewModel.AuthenticationType & (~authenticationTypeParam));
         }
     }
 }

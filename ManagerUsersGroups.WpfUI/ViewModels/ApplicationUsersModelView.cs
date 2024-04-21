@@ -3,6 +3,7 @@ using ManagerUsersGroups.Repository.AD.Implementations;
 using ManagerUsersGroups.Repository.AD.Options;
 using ManagerUsersGroups.Repository.Interfaces;
 using ManagerUsersGroups.WpfUI.Command;
+using ManagerUsersGroups.WpfUI.Converters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -12,17 +13,17 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
 {
     public class ApplicationUsersModelView
     {
-        public MainViewModel MainViewModel { get; } = new MainViewModel();
-        public ConfigModelView ConfigViewModel { get; } = new ConfigModelView();
+        private readonly IServiceProvider _serviceProvider;
+
+
+        public MainViewModel MainViewModel { get; }
+        public ConfigModelView ConfigViewModel { get; }
 
 
         public ICommand FindCommand { get; }
         public ICommand OpenSettingCommand { get; }
-
-
-        private readonly IServiceProvider _serviceProvider;
-
         
+
         public ApplicationUsersModelView()
         {
             IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
@@ -31,6 +32,11 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
             {
                 services.AddScoped<IUserRepository, UserRepository>();
                 services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
+                services.AddSingleton<MainViewModel>();
+                services.AddSingleton<ConfigModelView>();
+                services.AddSingleton<FindCommand>();
+                services.AddSingleton<SettingsCommand>();
+
                 services.AddOptions<ADOptions>().Configure(opts => 
                 {
                     opts.UserName = ConfigViewModel.UserName;
@@ -43,8 +49,11 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
 
             _serviceProvider = hostBuilder.Build().Services;
 
-            FindCommand = new FindCommand(MainViewModel, _serviceProvider);
-            OpenSettingCommand = new SettingsCommand();
+            MainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
+            ConfigViewModel = _serviceProvider.GetRequiredService<ConfigModelView>();
+
+            FindCommand = _serviceProvider.GetRequiredService<FindCommand>();
+            OpenSettingCommand = _serviceProvider.GetRequiredService<SettingsCommand>();
         }
     }
 }
