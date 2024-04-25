@@ -5,10 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace ManagerUsersGroups.WpfUI.Command
 {
@@ -52,7 +50,8 @@ namespace ManagerUsersGroups.WpfUI.Command
                 DisplayName = "Not find.",
                 DistinguishedName = "Not find.",
                 Email = "Not find.",
-                Login = "Not find."
+                Login = "Not find.",
+                HomeMDB = "Not find."
             };
 
             UserEntity FindMoreOne = new UserEntity
@@ -62,7 +61,8 @@ namespace ManagerUsersGroups.WpfUI.Command
                 DisplayName = "Find more one.",
                 DistinguishedName = "Find more one.",
                 Email = "Find more one.",
-                Login = "Find more one."
+                Login = "Find more one.",
+                HomeMDB = "Find more one."
             };
 
             UserEntity[] users = Task.WhenAll(findStrings.Select(async findStr =>
@@ -84,6 +84,7 @@ namespace ManagerUsersGroups.WpfUI.Command
             _mainViewModel.FIOs = string.Join('\n', users.Select(user => user.DisplayName));
             _mainViewModel.EmailsFormattedForOutlook = string.Join("; ", users.Select(user => user.Email));
             _mainViewModel.EmailsFormattedForHelp = string.Join(",", users.Select(user => user.Email));
+            _mainViewModel.EmailsDatabase = string.Join('\n', users.Select(user => Regex.Match(user.HomeMDB, "(?<=^CN=)[^,]+").Value));
 
             /*
             FindResult[] users = Task.WhenAll(findStrings.Select(async findStr =>

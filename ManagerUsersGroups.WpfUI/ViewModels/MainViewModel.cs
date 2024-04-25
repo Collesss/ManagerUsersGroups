@@ -8,6 +8,7 @@
         private string _emails = string.Empty;
         private string _emailsFormattedForOutlook = string.Empty;
         private string _emailsFormattedForHelp = string.Empty;
+        private string _emailsDatabase = string.Empty;
 
         public string EmailLoginsFIO
         {
@@ -65,6 +66,16 @@
             set
             {
                 _emailsFormattedForHelp = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string EmailsDatabase
+        {
+            get => _emailsDatabase;
+            set
+            {
+                _emailsDatabase = value;
                 OnPropertyChanged();
             }
         }
