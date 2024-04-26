@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cv="clr-namespace:ManagerUsersGroups.WpfUI.Converters"
+        xmlns:me="clr-namespace:ManagerUsersGroups.WpfUI.MarkupExtensions"
         xmlns:ad="clr-namespace:ManagerUsersGroups.Repository.AD.Options;assembly=ManagerUsersGroups.Repository.AD"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:en="clr-namespace:System.DirectoryServices;assembly=System.DirectoryServices"
@@ -86,7 +87,7 @@
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource CommonTextBlock}" Text="Пароль:"/>
         <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource CommonTextBlock}" VerticalAlignment="Top" Text="Тип аутентификации:"/>
 
-        <ComboBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3 3 5 3" Width="Auto" ItemsSource="{Binding LoginTypes,Mode=OneTime}" SelectedItem="{Binding LoginType,Mode=TwoWay}"/>
+        <ComboBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3 3 5 3" Width="Auto" ItemsSource="{Binding Source={me:EnumToItemsSourceMarkup {x:Type ad:LoginType}},Mode=OneTime}" SelectedItem="{Binding LoginType,Mode=TwoWay}"/>
 
         <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource UserContextWithPath}" Text="{Binding Path=Path,Mode=TwoWay}"/>
         <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PathWithLoginAndPass}" Text="{Binding Path=UserName,Mode=TwoWay}"/>

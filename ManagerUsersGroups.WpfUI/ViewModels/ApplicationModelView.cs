@@ -3,7 +3,7 @@ using ManagerUsersGroups.Repository.AD.Implementations;
 using ManagerUsersGroups.Repository.AD.Options;
 using ManagerUsersGroups.Repository.Interfaces;
 using ManagerUsersGroups.WpfUI.Command;
-using ManagerUsersGroups.WpfUI.Converters;
+using ManagerUsersGroups.WpfUI.ViewModels.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -11,18 +11,18 @@ using System.Windows.Input;
 
 namespace ManagerUsersGroups.WpfUI.ViewModel
 {
-    public class ApplicationUsersModelView
+    public class ApplicationUsersModelView : BaseViewModel, IApplicationViewModel
     {
         private readonly IServiceProvider _serviceProvider;
 
 
-        public MainViewModel MainViewModel { get; }
-        public ConfigModelView ConfigViewModel { get; }
+        public IMainViewModel MainViewModel { get; }
+        public IConfigViewModel ConfigViewModel { get; }
 
 
         public ICommand FindCommand { get; }
         public ICommand OpenSettingCommand { get; }
-        
+
 
         public ApplicationUsersModelView()
         {

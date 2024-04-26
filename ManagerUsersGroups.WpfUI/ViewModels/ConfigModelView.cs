@@ -1,11 +1,10 @@
 ﻿using ManagerUsersGroups.Repository.AD.Options;
-using System;
-using System.Collections.Generic;
+using ManagerUsersGroups.WpfUI.ViewModels.Interfaces;
 using System.DirectoryServices;
 
 namespace ManagerUsersGroups.WpfUI.ViewModel
 {
-    public class ConfigModelView : BaseViewModel
+    public class ConfigModelView : BaseViewModel, IConfigViewModel
     {
         private LoginType _loginType;
         private string _path;
@@ -13,9 +12,6 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
         private string _password;
         private AuthenticationTypes _authenticationType;
 
-
-        public IEnumerable<LoginType> LoginTypes =>
-            Enum.GetValues<LoginType>();
 
         public LoginType LoginType
         {

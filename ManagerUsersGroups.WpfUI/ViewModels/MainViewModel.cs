@@ -1,6 +1,8 @@
-﻿namespace ManagerUsersGroups.WpfUI.ViewModel
+﻿using ManagerUsersGroups.WpfUI.ViewModels.Interfaces;
+
+namespace ManagerUsersGroups.WpfUI.ViewModel
 {
-    public class MainViewModel : BaseViewModel
+    public class MainViewModel : BaseViewModel, IMainViewModel
     {
         private string _emailLoginsFIO = string.Empty;
         private string _logins = string.Empty;
