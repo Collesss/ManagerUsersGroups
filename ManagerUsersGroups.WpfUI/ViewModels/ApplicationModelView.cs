@@ -3,6 +3,7 @@ using ManagerUsersGroups.Repository.AD.Implementations;
 using ManagerUsersGroups.Repository.AD.Options;
 using ManagerUsersGroups.Repository.Interfaces;
 using ManagerUsersGroups.WpfUI.Command;
+using ManagerUsersGroups.WpfUI.Commands;
 using ManagerUsersGroups.WpfUI.ViewModels.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,6 +23,7 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
 
         public ICommand FindCommand { get; }
         public ICommand OpenSettingCommand { get; }
+        public ICommand SaveSettingCommand { get; }
 
 
         public ApplicationUsersModelView()
@@ -36,6 +38,7 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
                 services.AddSingleton<ConfigModelView>();
                 services.AddSingleton<FindCommand>();
                 services.AddSingleton<SettingsCommand>();
+                services.AddSingleton<SaveSettingCommand>();
 
                 services.AddOptions<ADOptions>().Configure(opts => 
                 {
@@ -54,6 +57,7 @@ namespace ManagerUsersGroups.WpfUI.ViewModel
 
             FindCommand = _serviceProvider.GetRequiredService<FindCommand>();
             OpenSettingCommand = _serviceProvider.GetRequiredService<SettingsCommand>();
+            SaveSettingCommand = _serviceProvider.GetRequiredService<SaveSettingCommand>();
         }
     }
 }
