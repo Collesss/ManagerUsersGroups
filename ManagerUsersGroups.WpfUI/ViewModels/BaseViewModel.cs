@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ManagerUsersGroups.WpfUI.ViewModel
+namespace ManagerUsersGroups.WpfUI.ViewModels
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {

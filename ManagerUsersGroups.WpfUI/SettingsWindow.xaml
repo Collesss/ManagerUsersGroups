@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:cv="clr-namespace:ManagerUsersGroups.WpfUI.Converters"
         xmlns:me="clr-namespace:ManagerUsersGroups.WpfUI.MarkupExtensions"
+        xmlns:vm="clr-namespace:ManagerUsersGroups.WpfUI.ViewModels"
         xmlns:ad="clr-namespace:ManagerUsersGroups.Repository.AD.Options;assembly=ManagerUsersGroups.Repository.AD"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:en="clr-namespace:System.DirectoryServices;assembly=System.DirectoryServices"
@@ -34,7 +34,7 @@
             <Setter Property="Margin" Value="5 8 5 5"/>
             <Setter Property="IsEnabled" Value="False"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Source={StaticResource ViewModel},Path=ConfigViewModel.LoginType}" Value="{x:Static ad:LoginType.PathWithLoginAndPassAndAuthenticationType}">
+                <DataTrigger Binding="{Binding ElementName=ComboBoxLoginType,Path=SelectedItem}" Value="{x:Static vm:ConfigLoginType.PathWithLoginAndPassAndAuthenticationType}">
                     <Setter Property="IsEnabled" Value="True"/>
                 </DataTrigger>
             </Style.Triggers>
@@ -45,7 +45,7 @@
         </Style>
         <Style x:Key="PathWithLoginAndPassAndAuthenticationType" BasedOn="{StaticResource BaseStyleTextBoxEnum}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Source={StaticResource ViewModel},Path=ConfigViewModel.LoginType}" Value="{x:Static ad:LoginType.PathWithLoginAndPassAndAuthenticationType}">
+                <DataTrigger Binding="{Binding ElementName=ComboBoxLoginType,Path=SelectedItem}" Value="{x:Static vm:ConfigLoginType.PathWithLoginAndPassAndAuthenticationType}">
                     <Setter Property="TextBox.IsEnabled" Value="True"/>
                     <Setter Property="TextBox.Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"/>
                 </DataTrigger>
@@ -53,7 +53,7 @@
         </Style>
         <Style x:Key="PathWithLoginAndPass" BasedOn="{StaticResource PathWithLoginAndPassAndAuthenticationType}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Source={StaticResource ViewModel},Path=ConfigViewModel.LoginType}" Value="{x:Static ad:LoginType.PathWithLoginAndPass}">
+                <DataTrigger Binding="{Binding ElementName=ComboBoxLoginType,Path=SelectedItem}" Value="{x:Static vm:ConfigLoginType.PathWithLoginAndPass}">
                     <Setter Property="TextBox.IsEnabled" Value="True"/>
                     <Setter Property="TextBox.Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"/>
                 </DataTrigger>
@@ -61,7 +61,7 @@
         </Style>
         <Style x:Key="UserContextWithPath" BasedOn="{StaticResource PathWithLoginAndPass}">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Source={StaticResource ViewModel},Path=ConfigViewModel.LoginType}" Value="{x:Static ad:LoginType.UserContextWithPath}">
+                <DataTrigger Binding="{Binding ElementName=ComboBoxLoginType,Path=SelectedItem}" Value="{x:Static vm:ConfigLoginType.UserContextWithPath}">
                     <Setter Property="TextBox.IsEnabled" Value="True"/>
                     <Setter Property="TextBox.Background" Value="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"/>
                 </DataTrigger>
@@ -81,18 +81,22 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        
+
+        <Grid.BindingGroup>
+            <BindingGroup x:Name="SettingBindingGroup"/>
+        </Grid.BindingGroup>
+
         <TextBlock Grid.Column="0" Grid.Row="0" Style="{StaticResource CommonTextBlock}" Text="Тип логина:"/>
         <TextBlock Grid.Column="0" Grid.Row="1" Style="{StaticResource CommonTextBlock}" Text="Путь:"/>
         <TextBlock Grid.Column="0" Grid.Row="2" Style="{StaticResource CommonTextBlock}" Text="Имя пользователя:"/>
         <TextBlock Grid.Column="0" Grid.Row="3" Style="{StaticResource CommonTextBlock}" Text="Пароль:"/>
         <TextBlock Grid.Column="0" Grid.Row="4" Style="{StaticResource CommonTextBlock}" VerticalAlignment="Top" Text="Тип аутентификации:"/>
 
-        <ComboBox Grid.Column="1" Grid.Row="0" x:Name="LoginType" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3 3 5 3" Width="Auto" ItemsSource="{Binding Source={me:EnumToItemsSourceMarkup {x:Type ad:LoginType}},Mode=OneTime}" SelectedItem="{Binding LoginType,Mode=TwoWay}"/>
+        <ComboBox Grid.Column="1" Grid.Row="0" x:Name="ComboBoxLoginType" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3 3 5 3" Width="Auto" ItemsSource="{Binding Source={me:EnumToItemsSourceMarkup {x:Type vm:ConfigLoginType}},Mode=OneTime}" SelectedItem="{Binding LoginType,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
 
-        <TextBox Grid.Column="1" Grid.Row="1" x:Name="Path" Style="{StaticResource UserContextWithPath}" Text="{Binding Path=Path,Mode=TwoWay}"/>
-        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PathWithLoginAndPass}" Text="{Binding Path=UserName,Mode=TwoWay}"/>
-        <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PathWithLoginAndPass}" Text="{Binding Path=Password,Mode=TwoWay}"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource UserContextWithPath}" Text="{Binding Path=Path,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PathWithLoginAndPass}" Text="{Binding Path=UserName,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+        <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PathWithLoginAndPass}" Text="{Binding Path=Password,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
 
         <Grid Grid.Column="1" Grid.Row="4">
             <Grid.ColumnDefinitions>
@@ -122,20 +126,17 @@
             <TextBlock Grid.Column="0" Grid.Row="8" Style="{StaticResource CommonTextBlock}" Text="Delegation:"/>
             <TextBlock Grid.Column="0" Grid.Row="9" Style="{StaticResource CommonTextBlock}" Text="ServerBind:"/>
 
-            <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Secure}}"/>
-            <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Encryption}}"/>
-            <CheckBox Grid.Column="1" Grid.Row="3" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.ReadonlyServer}}"/>
-            <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Anonymous}}"/>
-            <CheckBox Grid.Column="1" Grid.Row="5" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.FastBind}}"/>
-            <CheckBox Grid.Column="1" Grid.Row="6" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Signing}}"/>
-            <CheckBox Grid.Column="1" Grid.Row="7" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Sealing}}"/>
-            <CheckBox Grid.Column="1" Grid.Row="8" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.Delegation}}"/>
-            <CheckBox Grid.Column="1" Grid.Row="9" IsChecked="{Binding AuthenticationType,Converter={StaticResource EnumFlagsAuthenticationTypesConverter},ConverterParameter={x:Static en:AuthenticationTypes.ServerBind}}"/>
+            <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding AuthenticationTypesSecure,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+            <CheckBox Grid.Column="1" Grid.Row="2" IsChecked="{Binding AuthenticationTypesEncryptionSecureSocketsLayer,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+            <CheckBox Grid.Column="1" Grid.Row="3" IsChecked="{Binding AuthenticationTypesReadonlyServer,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+            <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding AuthenticationTypesAnonymous,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+            <CheckBox Grid.Column="1" Grid.Row="5" IsChecked="{Binding AuthenticationTypesFastBind,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+            <CheckBox Grid.Column="1" Grid.Row="6" IsChecked="{Binding AuthenticationTypesSigning,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+            <CheckBox Grid.Column="1" Grid.Row="7" IsChecked="{Binding AuthenticationTypesSealing,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+            <CheckBox Grid.Column="1" Grid.Row="8" IsChecked="{Binding AuthenticationTypesDelegation,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
+            <CheckBox Grid.Column="1" Grid.Row="9" IsChecked="{Binding AuthenticationTypesServerBind,Mode=TwoWay,UpdateSourceTrigger=Explicit}"/>
         </Grid>
 
-
-        <Button Grid.Column="0" Grid.Row="5" Command="{Binding Source={StaticResource ViewModel},Path=SaveSettingCommand}" Content="Сохранить" Padding="5" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="100" MaxWidth="140">
-
-        </Button>
+        <Button Grid.Column="0" Grid.Row="5" Command="{Binding Source={StaticResource ViewModel},Path=SaveSettingCommand}" CommandParameter="{Binding ElementName=SettingBindingGroup}" Content="Сохранить" Padding="5" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" MinWidth="100" MaxWidth="140"/>
     </Grid>
 </Window>

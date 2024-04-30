@@ -1,6 +1,6 @@
 ﻿using ManagerUsersGroups.WpfUI.ViewModels.Interfaces;
 
-namespace ManagerUsersGroups.WpfUI.ViewModel
+namespace ManagerUsersGroups.WpfUI.ViewModels
 {
     public class MainViewModel : BaseViewModel, IMainViewModel
     {

@@ -1,12 +1,10 @@
-﻿using ManagerUsersGroups.Repository.AD.Options;
-using System.ComponentModel;
-using System.DirectoryServices;
+﻿using System.ComponentModel;
 
 namespace ManagerUsersGroups.WpfUI.ViewModels.Interfaces
 {
     public interface IConfigViewModel : INotifyPropertyChanged
     {
-        LoginType LoginType { get; set; }
+        ConfigLoginType LoginType { get; set; }
 
         string Path { get; set; }
 
@@ -14,6 +12,15 @@ namespace ManagerUsersGroups.WpfUI.ViewModels.Interfaces
 
         string Password { get; set; }
 
-        AuthenticationTypes AuthenticationType { get; set; }
+
+        bool AuthenticationTypesSecure { get; set; }
+        bool AuthenticationTypesEncryptionSecureSocketsLayer { get; set; }
+        bool AuthenticationTypesReadonlyServer { get; set; }
+        bool AuthenticationTypesAnonymous { get; set; }
+        bool AuthenticationTypesFastBind { get; set; }
+        bool AuthenticationTypesSigning { get; set; }
+        bool AuthenticationTypesSealing { get; set; }
+        bool AuthenticationTypesDelegation { get; set; }
+        bool AuthenticationTypesServerBind { get; set; }
     }
 }

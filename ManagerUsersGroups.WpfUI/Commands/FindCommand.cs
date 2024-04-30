@@ -1,6 +1,6 @@
 ﻿using ManagerUsersGroups.Repository.Entities;
 using ManagerUsersGroups.Repository.Interfaces;
-using ManagerUsersGroups.WpfUI.ViewModel;
+using ManagerUsersGroups.WpfUI.ViewModels.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -12,10 +12,10 @@ namespace ManagerUsersGroups.WpfUI.Command
 {
     public class FindCommand : BaseCommand
     {
-        private readonly MainViewModel _mainViewModel;
+        private readonly IMainViewModel _mainViewModel;
         private readonly IServiceProvider _serviceProvider;
 
-        public FindCommand(MainViewModel mainViewModel, IServiceProvider serviceProvider)
+        public FindCommand(IMainViewModel mainViewModel, IServiceProvider serviceProvider)
         {
             _mainViewModel = mainViewModel ?? throw new ArgumentNullException(nameof(mainViewModel));
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
