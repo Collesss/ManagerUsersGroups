@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ManagerUsersGroups.Repository.AD.Options;
+using ManagerUsersGroups.WpfUI.Options;
 using ManagerUsersGroups.WpfUI.ViewModels;
 using ManagerUsersGroups.WpfUI.ViewModels.Interfaces;
 using System.DirectoryServices;
@@ -10,6 +11,9 @@ namespace ManagerUsersGroups.WpfUI.AutoMapperProfiles
     {
         public AutoMapperProfile() 
         {
+            CreateMap<IConfigViewModel, SettingOptions>();
+            CreateMap<SettingOptions, IConfigViewModel>();
+
             CreateMap<ConfigLoginType, LoginType>();
             CreateMap<LoginType, ConfigLoginType>();
 

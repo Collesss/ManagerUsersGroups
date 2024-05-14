@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Windows.Input;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
+using ManagerUsersGroups.WpfUI.Options;
 
 namespace ManagerUsersGroups.WpfUI.ViewModels
 {
@@ -25,6 +27,7 @@ namespace ManagerUsersGroups.WpfUI.ViewModels
 
         public ICommand FindCommand { get; }
         public ICommand OpenSettingCommand { get; }
+        public ICommand ApplySettingCommand { get; }
         public ICommand SaveSettingCommand { get; }
 
 
@@ -32,8 +35,13 @@ namespace ManagerUsersGroups.WpfUI.ViewModels
         {
             IHostBuilder hostBuilder = Host.CreateDefaultBuilder();
 
+
             hostBuilder.ConfigureServices(services =>
             {
+                var conf = new ConfigurationBuilder().AddJsonFile("configurations.json").Build();
+
+                services.AddSingleton<IConfiguration>(conf);
+
                 services.AddScoped<IUserRepository, UserRepository>();
                 services.AddAutoMapper(cfg =>
                 {
@@ -42,11 +50,14 @@ namespace ManagerUsersGroups.WpfUI.ViewModels
                 });
                 services.AddSingleton<IMainViewModel, MainViewModel>();
                 services.AddSingleton<IConfigViewModel, ConfigViewModel>();
+
                 services.AddKeyedSingleton<ICommand, FindCommand>("FindCommand");
-                services.AddKeyedSingleton<ICommand, SettingsCommand>("SettingsCommand");
+                services.AddKeyedSingleton<ICommand, OpenSettingCommand>("OpenSettingCommand");
+                services.AddKeyedSingleton<ICommand, ApplySettingCommand>("ApplySettingCommand");
                 services.AddKeyedSingleton<ICommand, SaveSettingCommand>("SaveSettingCommand");
 
 
+                services.Configure<SettingOptions>(conf);
                 services.AddOptions<ADOptions>().Configure<IMapper, IConfigViewModel>((opts, mapper, configViewModel) => mapper.Map(configViewModel, opts));
             });
 
@@ -56,7 +67,8 @@ namespace ManagerUsersGroups.WpfUI.ViewModels
             ConfigViewModel = _serviceProvider.GetRequiredService<IConfigViewModel>();
 
             FindCommand = _serviceProvider.GetRequiredKeyedService<ICommand>("FindCommand");
-            OpenSettingCommand = _serviceProvider.GetRequiredKeyedService<ICommand>("SettingsCommand");
+            OpenSettingCommand = _serviceProvider.GetRequiredKeyedService<ICommand>("OpenSettingCommand");
+            ApplySettingCommand = _serviceProvider.GetRequiredKeyedService<ICommand>("ApplySettingCommand");
             SaveSettingCommand = _serviceProvider.GetRequiredKeyedService<ICommand>("SaveSettingCommand");
         }
     }

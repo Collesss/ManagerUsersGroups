@@ -1,4 +1,7 @@
-﻿using ManagerUsersGroups.WpfUI.ViewModels.Interfaces;
+﻿using AutoMapper;
+using ManagerUsersGroups.WpfUI.Options;
+using ManagerUsersGroups.WpfUI.ViewModels.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace ManagerUsersGroups.WpfUI.ViewModels
 {
@@ -18,6 +21,12 @@ namespace ManagerUsersGroups.WpfUI.ViewModels
         private bool _authenticationTypesSealing;
         private bool _authenticationTypesDelegation;
         private bool _authenticationTypesServerBind;
+
+        public ConfigViewModel(IMapper mapper, IOptions<SettingOptions> options) 
+        {
+            mapper.Map(options.Value, this);
+        }
+
 
         public ConfigLoginType LoginType
         {

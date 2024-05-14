@@ -10,6 +10,7 @@ namespace ManagerUsersGroups.WpfUI.ViewModels.Interfaces
 
         public ICommand FindCommand { get; }
         public ICommand OpenSettingCommand { get; }
+        public ICommand ApplySettingCommand { get; }
         public ICommand SaveSettingCommand { get; }
     }
 }

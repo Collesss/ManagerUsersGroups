@@ -1,6 +1,6 @@
 ﻿namespace ManagerUsersGroups.WpfUI.Command
 {
-    public class SettingsCommand : BaseCommand
+    public class OpenSettingCommand : BaseCommand
     {
         public override void Execute(object parameter)
         {
